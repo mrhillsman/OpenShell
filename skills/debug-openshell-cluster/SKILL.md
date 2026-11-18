@@ -125,7 +125,8 @@ For dedicated Kubernetes supervisor placement, inspect the administrator's
 `supervisor_runtime_class_name` in the Kubernetes driver configuration and the
 supervisor Pod's `spec.runtimeClassName`. The setting is independent of the
 workload RuntimeClass and defaults to unset; it does not configure shared
-supervisor Deployments. If startup fails, check that the named RuntimeClass
+supervisor Deployments, which take the Helm value `supervisor.runtimeClassName`
+(default unset). If startup fails, check that the named RuntimeClass
 exists and its handler is available on eligible nodes. OpenShell does not retry
 with an ordinary supervisor Pod when the configured class is unavailable.
 
@@ -572,6 +573,10 @@ If a gateway pod stays Pending, inspect its scheduling events, confirm the
 named PriorityClass exists (`kubectl get priorityclass`), and check that topology
 spread selectors match the gateway pod labels and that eligible nodes have the
 required topology labels. These values apply only to gateway pods.
+`gateway.runtimeClassName` sets the gateway pod's `spec.runtimeClassName` and
+defaults to unset; if the pod is rejected or stays Pending, confirm the named
+RuntimeClass exists (`kubectl get runtimeclass`) and its handler is available
+on eligible nodes.
 
 #### Additional destination CA ConfigMap
 

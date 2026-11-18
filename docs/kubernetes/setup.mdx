@@ -302,6 +302,7 @@ The most commonly changed values are:
 | `replicaCount` | Number of gateway replicas. Values above `1` require shared PostgreSQL through `server.externalDbSecret`. |
 | `priorityClassName` | Existing Kubernetes PriorityClass for gateway pods. Empty by default. |
 | `topologySpreadConstraints` | Kubernetes topology spread constraints for gateway replicas. Empty by default. Set selectors to match the gateway pod labels. |
+| `gateway.runtimeClassName` / `supervisor.runtimeClassName` | Existing Kubernetes RuntimeClass for gateway pods and shared supervisor pods. Empty by default. |
 | `workload.kind` | Gateway workload controller. Use `statefulset` for SQLite or `deployment` with `server.externalDbSecret`. |
 | `workload.allowMultiReplicaStatefulSet` | Allow `replicaCount > 1` with `workload.kind=statefulset`. Prefer Deployment for external database-backed multi-replica gateways. |
 | `autoscaling.enabled` / `autoscaling.minReplicas` / `autoscaling.maxReplicas` | Render a HorizontalPodAutoscaler instead of a fixed `replicaCount`. Refer to [High Availability](/kubernetes/high-availability#scale-the-gateway). |

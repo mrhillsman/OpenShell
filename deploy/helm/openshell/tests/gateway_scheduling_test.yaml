@@ -54,6 +54,42 @@ tests:
           path: spec.template.spec.priorityClassName
           value: system-cluster-critical
 
+  # runtimeClassName — shared pod template, so both workload shapes
+  - it: omits runtimeClassName by default on the StatefulSet
+    template: templates/statefulset.yaml
+    asserts:
+      - notExists:
+          path: spec.template.spec.runtimeClassName
+
+  - it: omits runtimeClassName by default on the Deployment
+    template: templates/deployment.yaml
+    set:
+      workload.kind: deployment
+      server.externalDbSecret: openshell-db
+    asserts:
+      - notExists:
+          path: spec.template.spec.runtimeClassName
+
+  - it: sets runtimeClassName on the StatefulSet when configured
+    template: templates/statefulset.yaml
+    set:
+      gateway.runtimeClassName: kata-containers
+    asserts:
+      - equal:
+          path: spec.template.spec.runtimeClassName
+          value: kata-containers
+
+  - it: sets runtimeClassName on the Deployment when configured
+    template: templates/deployment.yaml
+    set:
+      workload.kind: deployment
+      server.externalDbSecret: openshell-db
+      gateway.runtimeClassName: kata-containers
+    asserts:
+      - equal:
+          path: spec.template.spec.runtimeClassName
+          value: kata-containers
+
   # topologySpreadConstraints — shared pod template, so both workload shapes
   - it: omits topologySpreadConstraints by default on the StatefulSet
     template: templates/statefulset.yaml

@@ -84,3 +84,35 @@ tests:
     asserts:
       - notExists:
           path: spec.template.spec.affinity
+  - it: omits runtimeClassName on the supervisor Pod by default
+    template: templates/supervisor.yaml
+    documentIndex: 0
+    asserts:
+      - notExists:
+          path: spec.runtimeClassName
+      - notExists:
+          path: spec.template.spec.runtimeClassName
+  - it: keeps gateway and supervisor runtimeClassName separate
+    set:
+      gateway:
+        runtimeClassName: gateway-runtime
+      supervisor:
+        runtimeClassName: supervisor-runtime
+    asserts:
+      - equal:
+          path: spec.template.spec.runtimeClassName
+          value: gateway-runtime
+        template: templates/statefulset.yaml
+      - equal:
+          path: spec.template.spec.runtimeClassName
+          value: supervisor-runtime
+        template: templates/supervisor.yaml
+        documentIndex: 0
+  - it: renders no gateway runtimeClassName when only supervisor.runtimeClassName is set
+    template: templates/statefulset.yaml
+    set:
+      supervisor:
+        runtimeClassName: supervisor-runtime
+    asserts:
+      - notExists:
+          path: spec.template.spec.runtimeClassName

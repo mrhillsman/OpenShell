@@ -356,6 +356,9 @@ spec:
     {{- end }}
     - name: gateway-state
       emptyDir: {}
+  {{- with .Values.gateway.runtimeClassName }}
+  runtimeClassName: {{ . | quote }}
+  {{- end }}
   {{- with .Values.priorityClassName }}
   priorityClassName: {{ . }}
   {{- end }}

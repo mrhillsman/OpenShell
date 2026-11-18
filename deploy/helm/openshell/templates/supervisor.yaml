@@ -76,6 +76,9 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.supervisor.runtimeClassName }}
+      runtimeClassName: {{ . | quote }}
+      {{- end }}
       {{- with .Values.supervisor.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

@@ -589,6 +589,7 @@ for peer identity policies, multi-node registrations, and authorization.
 | gateway.image.repository | string | `"openshell/gateway"` | Gateway image repository. |
 | gateway.image.tag | string | `""` | Gateway image tag. Defaults to the chart appVersion when empty. |
 | gateway.listenAddress | string | `"0.0.0.0"` | Gateway listener IP. Use `::` for IPv6. |
+| gateway.runtimeClassName | string | `""` | RuntimeClass for the gateway pod. The named RuntimeClass must exist in the cluster. Empty = omit the field, using the cluster's default runtime. |
 | gatewayConfig | object | `{"openshell":{"version":2}}` | Non-secret gateway application configuration. Top-level keys name TOML tables and are rendered into the mounted gateway.toml file. Kubernetes resource inputs remain outside this map; template expressions derive the corresponding runtime values from their resource owner. |
 | global.image.pullPolicy | string | `"IfNotPresent"` | Shared OpenShell image pull policy. Individual image pull policies take precedence. |
 | global.image.registry | string | `"ghcr.io/nvidia"` | Shared OpenShell image registry. Individual image registries take precedence. |
@@ -778,6 +779,7 @@ for peer identity policies, multi-node registrations, and authorization.
 | supervisor.podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` | Seccomp profile applied to the shared supervisor pod. |
 | supervisor.recoveryTimeoutSeconds | int | `60` | Seconds a sandbox workload stays frozen after losing its pool member's supervision before the sandbox runtime terminates it, rendered as [openshell.gateway.supervisor_pool] recovery_timeout_secs. Must be an integer from 30 to 300. Null leaves the gateway's pool default of 60 seconds. |
 | supervisor.replicas | int | `1` | Shared supervisor pool members, used only when gatewayConfig selects supervisor_topology = "gateway". The gateway always coordinates the shared supervisor as a high-availability pool: when a member fails or leaves, another member takes over its sandboxes without restarting their workloads. 1 has no failover; use 2 or more to survive losing a member. Only the supervisor Deployment's replica count depends on this value, so changing it neither restarts the gateway nor replaces running members. Ignored when supervisor.autoscaling.enabled is true. |
+| supervisor.runtimeClassName | string | `""` | RuntimeClass for the shared supervisor pod, rendered only when gatewayConfig selects supervisor_topology = "gateway". The named RuntimeClass must exist in the cluster. Empty = omit the field, using the cluster's default runtime. Dedicated supervisor pods use the Kubernetes driver's supervisor_runtime_class_name instead. |
 | supervisor.sandboxRuntime.boundaryPort | int | `5500` | Workload boundary TLS listener port. |
 | tolerations | list | `[]` | Tolerations for the gateway pod. |
 | topologySpreadConstraints | list | `[]` | Topology spread constraints for the gateway pod, used to spread replicas across zones or nodes. Empty = omit the field. |

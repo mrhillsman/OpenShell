@@ -41,6 +41,9 @@ gateway:
     digest: ""
   # -- Gateway listener IP. Use `::` for IPv6.
   listenAddress: 0.0.0.0
+  # -- RuntimeClass for the gateway pod. The named RuntimeClass must exist in
+  # the cluster. Empty = omit the field, using the cluster's default runtime.
+  runtimeClassName: ""
 
 # Trusted workload-side runtime image.
 sandboxRuntime:
@@ -138,6 +141,12 @@ supervisor:
   # gatewayConfig selects supervisor_topology = "gateway". Top-level affinity
   # applies only to the gateway pod.
   affinity: {}
+  # -- RuntimeClass for the shared supervisor pod, rendered only when
+  # gatewayConfig selects supervisor_topology = "gateway". The named
+  # RuntimeClass must exist in the cluster. Empty = omit the field, using the
+  # cluster's default runtime. Dedicated supervisor pods use the Kubernetes
+  # driver's supervisor_runtime_class_name instead.
+  runtimeClassName: ""
   network:
     # -- Name of an operator-owned ConfigMap with a `ca.crt` key containing additional destination CA certificates for sandbox supervisors. Empty disables additional destination trust.
     additionalCaConfigMapName: ""
